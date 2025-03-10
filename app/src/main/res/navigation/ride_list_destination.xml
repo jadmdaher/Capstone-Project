@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ride_list_destination"
+    app:startDestination="@+id/navigation_available_rides_list">
+
+    <fragment
+        android:id="@+id/navigation_available_rides_list"
+        android:label="History"
+        tools:layout="@layout/ride_list" />
+    <!-- Modify this field when you get to it (when you start developing the Available Rides activiity)
+        android:name="com.example.capstoneprojectv10.ui.ridehistory.ItemFragment"-->
+</navigation>

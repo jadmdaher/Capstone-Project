@@ -7,6 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="20dp"
         android:orientation="vertical"
         android:background="@drawable/gradient_background">
 
@@ -15,15 +16,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Updates"
-            android:textSize="48sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:paddingTop="10dp"
             android:paddingLeft="10dp" />
 
-        <View
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:text="Version 1.0.0"
             android:background="@drawable/rounded_rectangle"
             android:layout_margin="10dp" />
 
@@ -32,14 +34,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="What's New?"
-            android:textSize="48sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:paddingLeft="10dp" />
 
-        <View
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:text="Initial Release"
             android:background="@drawable/rounded_rectangle"
             android:layout_margin="10dp" />
 
@@ -48,15 +51,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Release Notes"
-            android:textSize="48sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:paddingLeft="10dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is the initial release of the app. Some features are still unavailable and will gradually be added in future updates."
+            android:background="@drawable/rounded_rectangle"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:id="@+id/tv_suggestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Release Notes"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:paddingLeft="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Capstone Project: Suggestion to remove the TextView that displays the title of the page in Ride History and keep only the RecyclerView because so far no progress was made in fixing the UI issues to implement the intended design. In addition, Available Rides which uses a RecyclerView just as Ride History will need to be treated as an activity instead of a fragment to develop the UI as intended. In the case of Available Rides the RecyclerView should be in a a fragment that will be referenced or called in the Available Rides activity, and the title of the page will be in a standard TextView in the LinearLayout of the activity's XML file. Lastly, Track Ride will most likely have to be an activity as well."
+            android:background="@drawable/rounded_rectangle"
+            android:layout_margin="10dp" />
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/rounded_rectangle"
+            android:layout_height="100dp"
             android:layout_margin="10dp" />
 
     </LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_background"
+    android:paddingTop="80dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Ride"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="80dp"
+        android:paddingBottom="16dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Departure Location"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:paddingBottom="8dp" />
+
+        <EditText
+            android:id="@+id/et_departure_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Beirut"
+            android:padding="8dp"
+            android:background="@drawable/text_input"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Arrival Location"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:textColor="@color/white"
+            android:paddingBottom="8dp" />
+
+        <EditText
+            android:id="@+id/et_arrival_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Byblos"
+            android:padding="8dp"
+            android:background="@drawable/text_input"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Departure Time"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:textColor="@color/white"
+            android:paddingBottom="8dp" />
+
+        <EditText
+            android:id="@+id/et_departure_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="12:00 PM"
+            android:padding="8dp"
+            android:background="@drawable/text_input"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_blue"
+        android:textColor="@color/white" />
+</LinearLayout>

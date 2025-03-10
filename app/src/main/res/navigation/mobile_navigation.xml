@@ -12,16 +12,22 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.capstoneprojectv10.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_newride"
+        android:name="com.example.capstoneprojectv10.ui.newride.NewRideFragment"
+        android:label="@string/title_new_ride"
+        tools:layout="@layout/fragment_new_ride" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.capstoneprojectv10.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_ridehistory"
+        android:name="com.example.capstoneprojectv10.ui.ridehistory.RideFragment"
+        android:label="History"
+        tools:layout="@layout/fragment_ride_list" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.capstoneprojectv10.ui.profile.ProfileFragment"
+        android:label="@string/title_profile" />
+
     <fragment
         android:id="@+id/navigation_maps"
         android:name="com.example.capstoneprojectv10.ui.map.MapsFragment"
