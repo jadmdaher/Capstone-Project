@@ -1,17 +1,28 @@
 package com.example.capstoneprojectv10.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.capstoneprojectv10.MainActivity;
 import com.example.capstoneprojectv10.R;
+import com.example.capstoneprojectv10.databinding.FragmentProfileBinding;
+import com.example.capstoneprojectv10.ui.authentication.LoginActivity;
+import com.example.capstoneprojectv10.ui.availablerides.AvailableRideActivity;
+import com.example.capstoneprojectv10.ui.newride.NewRideViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +30,9 @@ import com.example.capstoneprojectv10.R;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+
+    private FragmentProfileBinding binding;
+    private Button btnLogout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,5 +81,19 @@ public class ProfileFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding = FragmentProfileBinding.bind(view);
+
+        btnLogout = binding.btnLogout;
+
+        btnLogout.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        });
     }
 }

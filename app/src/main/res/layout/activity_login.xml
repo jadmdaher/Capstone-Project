@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/gradient_background"
     android:paddingTop="80dp"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    tools:context=".ui.authentication.LoginActivity">
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Ride"
+        android:text="Login"
         android:textSize="40sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -24,83 +27,69 @@
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"
         android:paddingTop="80dp"
-        android:paddingBottom="16dp" >
+        android:paddingBottom="16dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Departure Location"
+            android:text="Username"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:paddingBottom="8dp" />
 
         <EditText
-            android:id="@+id/et_departure_location"
+            android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:hint="Beirut"
+            android:hint="johndoe123"
             android:padding="8dp"
-            android:background="@drawable/text_input"/>
+            android:background="@drawable/text_input" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Arrival Location"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:textColor="@color/white"
-            android:paddingBottom="8dp" />
-
-        <EditText
-            android:id="@+id/et_arrival_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:hint="Byblos"
-            android:padding="8dp"
-            android:background="@drawable/text_input"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Departure Time"
+            android:text="Password"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="16dp"
             android:textColor="@color/white"
             android:paddingBottom="8dp" />
 
-        <!--<TimePicker
-            android:id="@+id/tp_departure_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner"
-            android:padding="8dp"
-            android:background="@drawable/text_input"/>-->
-
         <EditText
-            android:id="@+id/et_departure_time"
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:inputType="time"
-            android:hint="12:00 PM"
+            android:inputType="textPassword"
+            android:hint="********"
             android:padding="8dp"
-            android:background="@drawable/text_input"/>
+            android:background="@drawable/text_input" />
+
+        <TextView
+            android:id="@+id/tv_sign_up_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account? Sign Up"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:paddingTop="16dp"
+            android:textColor="@color/blue"
+            android:paddingBottom="8dp"
+            android:clickable="true" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_search"
+        android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
+        android:text="Login"
         android:textSize="16sp"
         android:textAllCaps="false"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/button_blue"
         android:textColor="@color/white" />
+
 </LinearLayout>

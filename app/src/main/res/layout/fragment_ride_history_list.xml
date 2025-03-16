@@ -2,8 +2,8 @@
 <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.example.capstoneprojectv10.ui.ridehistory.RideFragment"
+    android:id="@+id/ride_history_list"
+    android:name="com.example.capstoneprojectv10.ui.ridehistory.RideHistoryFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="30dp"
@@ -13,5 +13,5 @@
     android:clipToPadding="false"
     android:background="@drawable/gradient_background"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.ridehistory.RideFragment"
-    tools:listitem="@layout/fragment_ride" />
+    tools:context=".ui.ridehistory.RideHistoryFragment"
+    tools:listitem="@layout/fragment_ride_history_item" />

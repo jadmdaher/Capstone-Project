@@ -67,7 +67,7 @@
             android:id="@+id/tv_suggestions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Release Notes"
+            android:text="Suggestions"
             android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/white"

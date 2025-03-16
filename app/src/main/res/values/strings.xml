@@ -2,7 +2,7 @@
     <string name="app_name">Capstone Project v1.0</string>
     <string name="title_home">Home</string>
     <string name="title_new_ride">New Ride</string>
-    <string name="title_ride_history">Ride History</string>
+    <string name="title_ride_history">History</string>
     <string name="title_profile">Profile</string>
     <string name="title_map">Map</string>
     <string name="title_activity_auth">AuthActivity</string>
@@ -30,4 +30,5 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>

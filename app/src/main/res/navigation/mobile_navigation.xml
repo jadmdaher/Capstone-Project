@@ -15,18 +15,26 @@
         android:id="@+id/navigation_newride"
         android:name="com.example.capstoneprojectv10.ui.newride.NewRideFragment"
         android:label="@string/title_new_ride"
-        tools:layout="@layout/fragment_new_ride" />
+        tools:layout="@layout/fragment_new_ride" >
+        <action
+            android:id="@+id/action_newRideFragment_to_availableRidesFragment"
+            app:destination="@layout/activity_available_ride_list" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_ridehistory"
-        android:name="com.example.capstoneprojectv10.ui.ridehistory.RideFragment"
-        android:label="History"
-        tools:layout="@layout/fragment_ride_list" />
+        android:name="com.example.capstoneprojectv10.ui.ridehistory.RideHistoryFragment"
+        android:label="@string/title_ride_history"
+        tools:layout="@layout/fragment_ride_history_list" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.capstoneprojectv10.ui.profile.ProfileFragment"
-        android:label="@string/title_profile" />
+        android:label="@string/title_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_signUpActivity"
+            app:destination="@layout/activity_sign_up" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_maps"

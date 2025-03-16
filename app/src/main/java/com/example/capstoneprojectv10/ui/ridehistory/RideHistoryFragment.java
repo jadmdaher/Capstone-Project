@@ -18,7 +18,7 @@ import com.example.capstoneprojectv10.ui.ridehistory.placeholder.PlaceholderCont
 /**
  * A fragment representing a list of Items.
  */
-public class RideFragment extends Fragment {
+public class RideHistoryFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -29,13 +29,13 @@ public class RideFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RideFragment() {
+    public RideHistoryFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static RideFragment newInstance(int columnCount) {
-        RideFragment fragment = new RideFragment();
+    public static RideHistoryFragment newInstance(int columnCount) {
+        RideHistoryFragment fragment = new RideHistoryFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -54,7 +54,7 @@ public class RideFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ride_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_ride_history_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -65,7 +65,7 @@ public class RideFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new RideRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new RideHistoryRecyclerViewAdapter(PlaceholderContent.ITEMS));
         }
         return view;
     }
