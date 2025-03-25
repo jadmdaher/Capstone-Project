@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // Initializing Places SDK
+        Places.initialize(getApplicationContext(), "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU");
     }
 
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Capstone Project v1.0</string>
+    <string name="app_name">LaneBash</string>
     <string name="title_home">Home</string>
     <string name="title_new_ride">New Ride</string>
     <string name="title_ride_history">History</string>

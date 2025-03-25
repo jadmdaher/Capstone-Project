@@ -68,7 +68,7 @@ public class AvailableRideRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         }
 
         public void bind() {
-            titleTextView.setText("Available History");
+            titleTextView.setText("Available Rides");
         }
     }
 

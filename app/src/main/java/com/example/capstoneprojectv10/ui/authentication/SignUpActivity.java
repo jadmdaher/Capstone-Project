@@ -1,33 +1,49 @@
 package com.example.capstoneprojectv10.ui.authentication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.capstoneprojectv10.MainActivity;
 import com.example.capstoneprojectv10.R;
+import com.example.capstoneprojectv10.data.model.Ride;
 import com.example.capstoneprojectv10.databinding.ActivitySignUpBinding;
+import com.example.capstoneprojectv10.ui.authentication.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
-    private EditText firstNameEditText;
-    private EditText lastNameEditText;
-    private EditText usernameEditText;
-    private EditText phoneEditText;
-    private EditText passwordEditText;
+    private EditText firstNameEditText, lastNameEditText, usernameEditText, phoneEditText, passwordEditText;
     private TextView loginLinkText;
     private Button signUpButton;
+    private ProgressBar progressBar;
+    private FirebaseFirestore databaseInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +58,6 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });*/
-
         firstNameEditText = binding.etFirstName;
         lastNameEditText = binding.etLastName;
         usernameEditText = binding.etUsername;
@@ -55,21 +65,87 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = binding.etPassword;
         loginLinkText = binding.tvLoginLink;
         signUpButton = binding.btnSignUp;
+        progressBar = binding.progressBar;
+        databaseInstance = FirebaseFirestore.getInstance();
 
         // ClickListener for sign up button
         signUpButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            // Finish the SignUpActivity
-            finish();
+            progressBar.setVisibility(View.VISIBLE);
+            signUpButton.setEnabled(false);
+
+            String firstName = firstNameEditText.getText().toString().trim();
+            String lastName = lastNameEditText.getText().toString().trim();
+            String username = usernameEditText.getText().toString().trim();
+            String phone = phoneEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+
+            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || password.isEmpty()) {
+                Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                signUpButton.setEnabled(true);
+                return;
+            }
+
+            checkUsernameAndRegister(firstName, lastName, username, phone, password);
         });
 
         // ClickListener for login text
         loginLinkText.setOnClickListener(v -> {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-            // Finish the SignUpActivity
-            //finish();
         });
+    }
+
+    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String password) {
+        databaseInstance.collection("users")
+                .whereEqualTo("username", username)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().isEmpty()) {
+                            Toast.makeText(SignUpActivity.this, "Username already exists. Choose another one.", Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                            signUpButton.setEnabled(true);
+                        } else {
+                            // Hash password and store user
+                            String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+                            putData(firstName, lastName, username, phone, hashedPassword);
+                        }
+                    } else {
+                        Log.w("FIREBASE_TAG", "Error checking username", task.getException());
+                        Toast.makeText(SignUpActivity.this, "Error checking username. Try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void putData(String firstName, String lastName, String username, String phone, String hashedPassword) {
+        Map<String, Object> user = new HashMap<>();
+        // Create an empty list of rides
+        ArrayList<Map<String, Object>> rides = new ArrayList<>();
+
+        user.put("first name", firstName);
+        user.put("last name", lastName);
+        user.put("username", username);
+        user.put("phone", phone);
+        user.put("password", hashedPassword);
+        user.put("rides", rides);
+
+        databaseInstance.collection("users")
+                .add(user)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("FIREBASE_TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    Toast.makeText(SignUpActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("username", username); // Save unique identifier
+                    editor.apply();
+
+                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("FIREBASE_TAG", "Error adding document", e);
+                    Toast.makeText(SignUpActivity.this, "Sign-up failed. Try again.", Toast.LENGTH_LONG).show();
+                });
     }
 }

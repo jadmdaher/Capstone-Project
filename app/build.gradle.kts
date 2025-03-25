@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -51,6 +52,14 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.cardview)
     implementation(libs.androidx.activity)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.bcrypt)
+    implementation(libs.places)
+    implementation(libs.firebase.storage)
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

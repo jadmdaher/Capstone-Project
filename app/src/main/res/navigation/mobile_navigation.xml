@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_newRideFragment_to_availableRidesFragment"
             app:destination="@layout/activity_available_ride_list" />
+        <action
+            android:id="@+id/action_newRideFragment_to_mapsFragment"
+            app:destination="@layout/fragment_maps" />
     </fragment>
 
     <fragment
