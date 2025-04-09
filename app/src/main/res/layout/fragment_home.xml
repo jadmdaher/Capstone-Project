@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:paddingTop="20dp"
         android:orientation="vertical"
-        android:background="@drawable/gradient_background">
+        android:background="@drawable/new_background">
 
         <TextView
             android:id="@+id/tv_updates"
@@ -18,7 +18,7 @@
             android:text="Updates"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:paddingTop="10dp"
             android:paddingLeft="10dp" />
 
@@ -36,7 +36,7 @@
             android:text="What's New?"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:paddingLeft="10dp" />
 
         <TextView
@@ -53,7 +53,7 @@
             android:text="Release Notes"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:paddingLeft="10dp" />
 
         <TextView
@@ -70,7 +70,7 @@
             android:text="Suggestions"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:paddingLeft="10dp" />
 
         <TextView

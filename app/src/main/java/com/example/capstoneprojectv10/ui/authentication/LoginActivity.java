@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,7 +72,22 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = binding.progressBar;
         databaseInstance = FirebaseFirestore.getInstance();
 
-        // ClickListener for login button
+        // Animate the click of the button
+        loginButton.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    v.animate().scaleX(0.97f).scaleY(0.97f).setDuration(100).start();
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                    break;
+            }
+            return false; // Let the click still happen
+        });
+
+
+        // Specify what happens when the login button is clicked
         loginButton.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
             loginButton.setEnabled(false);
@@ -114,6 +130,8 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 // Password incorrect
                                 Toast.makeText(LoginActivity.this, "Incorrect password.", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                                loginButton.setEnabled(true);
                             }
                         }
                     })

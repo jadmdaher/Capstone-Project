@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="@drawable/gradient_background"
+        android:background="@drawable/new_background"
         android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="80dp"
+            android:paddingTop="40dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
@@ -28,7 +28,7 @@
                 android:text="Sign Up"
                 android:textSize="40sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:layout_gravity="center_horizontal" />
 
             <LinearLayout
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center_horizontal"
-                android:paddingTop="80dp"
+                android:paddingTop="40dp"
                 android:paddingBottom="16dp">
 
                 <TextView
@@ -45,7 +45,7 @@
                     android:text="First Name"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -64,7 +64,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:paddingTop="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -83,7 +83,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:paddingTop="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -103,7 +103,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:paddingTop="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:inputType="phone"
-                    android:hint="XX XXX XXX"
+                    android:hint="Enter phone number"
                     android:padding="8dp"
                     android:background="@drawable/text_input" />
 
@@ -123,7 +123,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:paddingTop="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -133,6 +133,25 @@
                     android:textSize="16sp"
                     android:inputType="textPassword"
                     android:hint="Enter password"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Role"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/role_options"
+                    android:textSize="16sp"
                     android:padding="8dp"
                     android:background="@drawable/text_input" />
 
@@ -152,14 +171,14 @@
 
             <Button
                 android:id="@+id/btn_sign_up"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/button_blue"
-                android:textColor="@color/white" />
+                android:textColor="@color/text_color" />
         </LinearLayout>
     </ScrollView>
 

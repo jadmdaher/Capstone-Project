@@ -7,15 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="#F4F4F4"
         android:paddingTop="30dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="16dp"
+        android:background="@drawable/new_background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="40dp"
             android:orientation="vertical">
 
             <ImageView
@@ -29,16 +30,19 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
+                android:paddingBottom="24dp"
                 android:paddingTop="8dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="16dp">
+                android:paddingTop="16dp"
+                android:background="@drawable/profile_info_background" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,6 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="First Name"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -57,6 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textAlignment="viewEnd"
                         android:padding="8dp" />
@@ -66,7 +72,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#C4C4C4" />
+                    android:background="@color/text_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -78,6 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Last Name"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -86,6 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/text_color"
                         android:textAlignment="viewEnd"
                         android:textSize="16sp"
                         android:padding="8dp" />
@@ -95,7 +103,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#C4C4C4" />
+                    android:background="@color/text_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -107,6 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Username"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -115,6 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textAlignment="viewEnd"
                         android:padding="8dp" />
@@ -124,7 +134,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#C4C4C4" />
+                    android:background="@color/text_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -136,6 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Phone Number"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -144,6 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textAlignment="viewEnd"
                         android:padding="8dp" />
@@ -153,7 +165,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#C4C4C4" />
+                    android:background="@color/text_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -165,35 +177,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Role"
+                        android:textColor="@color/text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <Spinner
-                        android:id="@+id/spinner_role"
+                    <TextView
+                        android:id="@+id/tv_role"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
                         android:textAlignment="viewEnd"
-                        android:entries="@array/role_options"
-                        android:padding="8dp"
-                        android:background="@drawable/spinner_outline" />
+                        android:padding="8dp" />
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#C4C4C4" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btn_logout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Logout"
                 android:textSize="16sp"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/button_red"
                 android:padding="12dp"

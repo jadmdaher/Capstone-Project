@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="text_color">#B0BEC5</color>
     <color name="custom_green">#009F4D</color>
     <color name="light_gray">#FFC4C4C4</color>
-    <color name="red">#FFD32F2F</color>
-    <color name="blue">#0055FF</color>
+    <color name="red">#A73838</color>
+    <color name="red_pressed">#A73838</color>
+    <color name="blue">#003ECC</color>
+    <color name="blue_pressed">#003ECC</color>
+    <color name="green">#0A927D</color>
+    <color name="green_pressed">#0A927D</color>
+    <color name="white">#FFFFFF</color>"
 </resources>

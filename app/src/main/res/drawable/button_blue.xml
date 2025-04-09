@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<item>
+    <!-- Pressed State-->
+    <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="@null"/>
+            <solid android:color="@color/blue_pressed"/>
             <corners android:radius="12dp"/>
-            <stroke android:width="2dp" android:color="@color/red"/>
         </shape>
     </item>
-    <item android:state_pressed="true" tools:ignore="StateListReachable">-->
-    <item>
+
+    <!-- Default State-->
+    <item android:state_pressed="false">
         <shape android:shape="rectangle">
             <solid android:color="@color/blue"/>
             <corners android:radius="12dp"/>

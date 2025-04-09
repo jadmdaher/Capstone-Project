@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.places)
     implementation(libs.firebase.storage)
     implementation(libs.glide)
+    implementation(libs.imagepicker)
+    implementation(libs.android.maps.utils)
     annotationProcessor(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

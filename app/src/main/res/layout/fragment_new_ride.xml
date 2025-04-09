@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
+    android:background="@drawable/new_background"
+    android:fillViewport="true"
     android:fitsSystemWindows="true" >
 
     <LinearLayout
@@ -20,7 +21,7 @@
             android:text="New Ride"
             android:textSize="40sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:layout_gravity="center_horizontal" />
 
         <LinearLayout
@@ -37,7 +38,7 @@
                 android:text="Origin"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:paddingBottom="8dp" />
 
             <AutoCompleteTextView
@@ -56,7 +57,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:paddingBottom="8dp" />
 
             <AutoCompleteTextView
@@ -75,7 +76,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:paddingBottom="8dp" />
 
             <!--<TimePicker
@@ -99,14 +100,14 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_new_ride"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search"
+            android:text="New Ride"
             android:textSize="16sp"
             android:textAllCaps="false"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/button_blue"
-            android:textColor="@color/white" />
+            android:textColor="@color/text_color" />
     </LinearLayout>
 </ScrollView>

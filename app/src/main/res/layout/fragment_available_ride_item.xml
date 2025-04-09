@@ -16,10 +16,18 @@
 
         <ImageView
             android:id="@+id/profile_image"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:padding="5dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_profile_placeholder" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:layout_gravity="center_vertical">
 
         <!-- Ride Name -->
         <TextView
@@ -37,9 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="140dp"
             android:text="DD/MM/YYYY"
             android:textSize="14sp" />
+        </LinearLayout>
 
     </LinearLayout>
 

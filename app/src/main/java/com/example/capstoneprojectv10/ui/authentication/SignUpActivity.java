@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, phoneEditText, passwordEditText;
+    private Spinner roleSpinner;
     private TextView loginLinkText;
     private Button signUpButton;
     private ProgressBar progressBar;
@@ -63,12 +66,28 @@ public class SignUpActivity extends AppCompatActivity {
         usernameEditText = binding.etUsername;
         phoneEditText = binding.etPhoneNumber;
         passwordEditText = binding.etPassword;
+        roleSpinner = binding.spinnerRole;
         loginLinkText = binding.tvLoginLink;
         signUpButton = binding.btnSignUp;
         progressBar = binding.progressBar;
         databaseInstance = FirebaseFirestore.getInstance();
 
-        // ClickListener for sign up button
+        // Animate the click of the button
+        signUpButton.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    v.animate().scaleX(0.97f).scaleY(0.97f).setDuration(100).start();
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                    break;
+            }
+            return false; // Let the click still happen
+        });
+
+
+        // Specify what happens when the sign up button is clicked
         signUpButton.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
             signUpButton.setEnabled(false);
@@ -78,15 +97,16 @@ public class SignUpActivity extends AppCompatActivity {
             String username = usernameEditText.getText().toString().trim();
             String phone = phoneEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
+            String role = roleSpinner.getSelectedItem().toString();
 
-            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || password.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || password.isEmpty() || role.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 signUpButton.setEnabled(true);
                 return;
             }
 
-            checkUsernameAndRegister(firstName, lastName, username, phone, password);
+            checkUsernameAndRegister(firstName, lastName, username, phone, password, role);
         });
 
         // ClickListener for login text
@@ -96,7 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String password) {
+    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String password, String role) {
         databaseInstance.collection("users")
                 .whereEqualTo("username", username)
                 .get()
@@ -109,7 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
                         } else {
                             // Hash password and store user
                             String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-                            putData(firstName, lastName, username, phone, hashedPassword);
+                            putData(firstName, lastName, username, phone, hashedPassword, role);
                         }
                     } else {
                         Log.w("FIREBASE_TAG", "Error checking username", task.getException());
@@ -118,7 +138,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void putData(String firstName, String lastName, String username, String phone, String hashedPassword) {
+    private void putData(String firstName, String lastName, String username, String phone, String hashedPassword, String role) {
         Map<String, Object> user = new HashMap<>();
         // Create an empty list of rides
         ArrayList<Map<String, Object>> rides = new ArrayList<>();
@@ -128,6 +148,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("username", username);
         user.put("phone", phone);
         user.put("password", hashedPassword);
+        user.put("role", role);
         user.put("rides", rides);
 
         databaseInstance.collection("users")

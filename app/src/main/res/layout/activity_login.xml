@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_background"
+        android:background="@drawable/new_background"
         android:fitsSystemWindows="true">
 
         <LinearLayout
@@ -27,7 +27,7 @@
                 android:text="Login"
                 android:textSize="40sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:layout_gravity="center_horizontal" />
 
             <LinearLayout
@@ -44,7 +44,7 @@
                     android:text="Username"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -63,7 +63,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:paddingTop="16dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
                     android:paddingBottom="8dp" />
 
                 <EditText
@@ -92,14 +92,14 @@
 
             <Button
                 android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Login"
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/button_blue"
-                android:textColor="@color/white" />
+                android:textColor="@color/text_color" />
 
         </LinearLayout>
     </ScrollView>

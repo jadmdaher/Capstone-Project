@@ -11,7 +11,7 @@
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
     android:clipToPadding="false"
-    android:background="@drawable/gradient_background"
+    android:background="@drawable/new_background"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.availablerides.AvailableRideActivity"
     tools:listitem="@layout/fragment_available_ride_item" />
