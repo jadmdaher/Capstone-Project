@@ -58,6 +58,7 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.16.0" }
 imagepicker = { group = "com.github.dhaval2404", name = "imagepicker", version = "2.1" }
 android-maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version = "3.4.0" }
+okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version = "4.10.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

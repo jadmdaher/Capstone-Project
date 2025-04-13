@@ -42,7 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
     private EditText firstNameEditText, lastNameEditText, usernameEditText, phoneEditText, passwordEditText;
-    private Spinner roleSpinner;
+    private Spinner roleSpinner, genderSpinner, smokingSpinner, sameGenderSpinner, musicSpinner;
     private TextView loginLinkText;
     private Button signUpButton;
     private ProgressBar progressBar;
@@ -67,6 +67,10 @@ public class SignUpActivity extends AppCompatActivity {
         phoneEditText = binding.etPhoneNumber;
         passwordEditText = binding.etPassword;
         roleSpinner = binding.spinnerRole;
+        genderSpinner = binding.spinnerGender;
+        smokingSpinner = binding.spinnerSmoking;
+        sameGenderSpinner = binding.spinnerGenderPreference;
+        musicSpinner = binding.spinnerMusic;
         loginLinkText = binding.tvLoginLink;
         signUpButton = binding.btnSignUp;
         progressBar = binding.progressBar;
@@ -98,15 +102,19 @@ public class SignUpActivity extends AppCompatActivity {
             String phone = phoneEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
             String role = roleSpinner.getSelectedItem().toString();
+            String gender = genderSpinner.getSelectedItem().toString();
+            String smokingPreference = smokingSpinner.getSelectedItem().toString();
+            String sameGenderPreference = sameGenderSpinner.getSelectedItem().toString();
+            String musicPreference = musicSpinner.getSelectedItem().toString();
 
-            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || password.isEmpty() || role.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || phone.isEmpty() || password.isEmpty() || role.isEmpty() || gender.isEmpty() || smokingPreference.isEmpty() || sameGenderPreference.isEmpty() || musicPreference.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 signUpButton.setEnabled(true);
                 return;
             }
 
-            checkUsernameAndRegister(firstName, lastName, username, phone, password, role);
+            checkUsernameAndRegister(firstName, lastName, username, phone, password, role, gender, smokingPreference, sameGenderPreference, musicPreference);
         });
 
         // ClickListener for login text
@@ -116,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String password, String role) {
+    private void checkUsernameAndRegister(String firstName, String lastName, String username, String phone, String password, String role, String gender, String smokingPreference, String sameGenderPreference, String musicPreference) {
         databaseInstance.collection("users")
                 .whereEqualTo("username", username)
                 .get()
@@ -129,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
                         } else {
                             // Hash password and store user
                             String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-                            putData(firstName, lastName, username, phone, hashedPassword, role);
+                            putData(firstName, lastName, username, phone, hashedPassword, role, gender, smokingPreference, sameGenderPreference, musicPreference);
                         }
                     } else {
                         Log.w("FIREBASE_TAG", "Error checking username", task.getException());
@@ -138,7 +146,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void putData(String firstName, String lastName, String username, String phone, String hashedPassword, String role) {
+    private void putData(String firstName, String lastName, String username, String phone, String hashedPassword, String role, String gender, String smokingPreference, String sameGenderPreference, String musicPreference) {
         Map<String, Object> user = new HashMap<>();
         // Create an empty list of rides
         ArrayList<Map<String, Object>> rides = new ArrayList<>();
@@ -149,7 +157,10 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("phone", phone);
         user.put("password", hashedPassword);
         user.put("role", role);
-        user.put("rides", rides);
+        user.put("gender", gender);
+        user.put("smoking preference", smokingPreference);
+        user.put("same gender preference", sameGenderPreference);
+        user.put("music preference", musicPreference);
 
         databaseInstance.collection("users")
                 .add(user)

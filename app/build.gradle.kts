@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.capstoneprojectv10"
-        minSdk = 33
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.imagepicker)
     implementation(libs.android.maps.utils)
+    implementation(libs.okhttp3)
     annotationProcessor(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

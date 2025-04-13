@@ -4,4 +4,12 @@
         <item>Passenger  </item>
         <item>Driver  </item>
     </string-array>
+    <string-array name="preference_options">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>

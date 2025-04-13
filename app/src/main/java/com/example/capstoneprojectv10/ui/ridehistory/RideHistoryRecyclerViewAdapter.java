@@ -6,21 +6,29 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.capstoneprojectv10.R;
+import com.example.capstoneprojectv10.data.model.RideItem;
+import com.example.capstoneprojectv10.databinding.FragmentAvailableRideItemBinding;
 import com.example.capstoneprojectv10.databinding.FragmentRideHistoryItemBinding;
 import com.example.capstoneprojectv10.databinding.RecyclerviewRideHistoryTitleBinding;
 import com.example.capstoneprojectv10.ui.ridehistory.placeholder.PlaceholderContent.PlaceholderItem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_TITLE = 0;
     private static final int VIEW_TYPE_RIDE = 1;
 
-    private final List<PlaceholderItem> mValues;
+    //private final List<PlaceholderItem> mValues;
+    private final List<RideItem> rideList;
 
-    public RideHistoryRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public RideHistoryRecyclerViewAdapter(List<RideItem> items) {
+        this.rideList = items;
     }
 
     @Override
@@ -46,13 +54,13 @@ public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         if (holder instanceof RideHistoryTitleViewHolder) {
             ((RideHistoryTitleViewHolder) holder).bind();
         } else if (holder instanceof RideHistoryViewHolder) {
-            ((RideHistoryViewHolder) holder).bind(mValues.get(position - 1)); // Adjust index for rides
+            ((RideHistoryViewHolder) holder).bind(rideList.get(position - 1)); // Adjust index for rides
         }
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size() + 1; // Extra count for title item
+        return rideList.size() + 1; // Extra count for title item
     }
 
     public static class RideHistoryTitleViewHolder extends RecyclerView.ViewHolder {
@@ -78,9 +86,30 @@ public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             mContentView = binding.rideDate;
         }
 
-        public void bind(PlaceholderItem item) {
-            mIdView.setText(item.id);
-            mContentView.setText(item.content);
+        public void bind(RideItem item) {
+            mIdView.setText("@" + item.driverName);
+
+            try {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                Date date = inputFormat.parse(item.rideDate);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                mContentView.setText(outputFormat.format(date));
+            } catch (Exception e) {
+                mContentView.setText(item.rideDate);
+            }
+
+            FragmentAvailableRideItemBinding binding = FragmentAvailableRideItemBinding.bind(itemView);
+
+            // Load profile image with fallback
+            if (item.profileImageUrl != null && !item.profileImageUrl.isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .load(item.profileImageUrl)
+                        .circleCrop()
+                        .into(binding.profileImage);
+            } else {
+                binding.profileImage.setImageResource(R.drawable.ic_profile_placeholder);
+            }
         }
+
     }
 }

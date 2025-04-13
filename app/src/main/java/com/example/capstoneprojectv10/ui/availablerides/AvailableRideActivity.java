@@ -2,9 +2,12 @@ package com.example.capstoneprojectv10.ui.availablerides;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +27,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AvailableRideActivity extends AppCompatActivity {
 
@@ -71,8 +80,9 @@ public class AvailableRideActivity extends AppCompatActivity {
         finish(); // Closes the activity when the back button is clicked
     }
 
-    private void fetchDriverProfilesAndLoad() {
+    /*private void fetchDriverProfilesAndLoad() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Geocoder geocoder = new Geocoder(this);
 
         for (RideItem ride : rides) {
             db.collection("users")
@@ -84,7 +94,35 @@ public class AvailableRideActivity extends AppCompatActivity {
                             ride.profileImageUrl = doc.getString("profileImageUrl");
                         }
 
-                        // Refresh adapter after loading profiles
+                        try {
+                            // Get departure name
+                            List<Address> originAddresses = geocoder.getFromLocation(
+                                    ride.origin.getLatitude(),
+                                    ride.origin.getLongitude(),
+                                    1
+                            );
+                            if (!originAddresses.isEmpty()) {
+                                Address originAddress = originAddresses.get(0);
+                                ride.departureName = originAddress.getAddressLine(0); // Full address
+                            }
+
+                            // Get destination name
+                            List<Address> destAddresses = geocoder.getFromLocation(
+                                    ride.destination.getLatitude(),
+                                    ride.destination.getLongitude(),
+                                    1
+                            );
+                            if (!destAddresses.isEmpty()) {
+                                Address destAddress = destAddresses.get(0);
+                                ride.destinationName = destAddress.getAddressLine(0); // Full address
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            ride.departureName = ride.origin.getLatitude() + ", " + ride.origin.getLongitude();
+                            ride.destinationName = ride.destination.getLatitude() + ", " + ride.destination.getLongitude();
+                        }
+
+                        // Refresh adapter after loading profiles and addresses
                         adapter = new AvailableRideRecyclerViewAdapter(rides, rideItem -> {
                             Bundle args = new Bundle();
                             args.putDouble("origin_lat", rideItem.origin.getLatitude());
@@ -101,6 +139,108 @@ public class AvailableRideActivity extends AppCompatActivity {
                             startActivity(intent);
                         });
                         recyclerView.setAdapter(adapter);
+                    });
+        }
+    }*/
+
+    private void fetchDriverProfilesAndLoad() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Geocoder geocoder = new Geocoder(this);
+
+        // Initialize adapter ONCE
+        adapter = new AvailableRideRecyclerViewAdapter(rides, rideItem -> {
+            if (rideItem.origin != null && rideItem.destination != null) {
+                Bundle args = new Bundle();
+                args.putDouble("origin_lat", rideItem.origin.getLatitude());
+                args.putDouble("origin_lng", rideItem.origin.getLongitude());
+                args.putDouble("dest_lat", rideItem.destination.getLatitude());
+                args.putDouble("dest_lng", rideItem.destination.getLongitude());
+
+                /*Intent intent = new Intent(this, PassengerRouteActivity.class);
+                intent.putExtras(args);
+                intent.putExtra("departure_name", rideItem.departureName);
+                intent.putExtra("destination_name", rideItem.destinationName);
+                intent.putExtra("departure_date", rideItem.rideDate);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);*/
+
+                String rideId = rideItem.rideId; // if you have a rideId field, or null
+                String passengerUsername = getSharedPreferences("UserPrefs", MODE_PRIVATE).getString("username", null);
+                String driverUsername = rideItem.driverName;
+
+                Map<String, Object> request = new HashMap<>();
+                request.put("rideId", rideId != null ? rideId : "unknown");
+                request.put("passengerUsername", passengerUsername);
+                request.put("driverUsername", driverUsername);
+                request.put("status", "pending");
+                request.put("timestamp", System.currentTimeMillis());
+
+                db.collection("ride_requests")
+                        .add(request)
+                        .addOnSuccessListener(docRef -> {
+                            Toast.makeText(this, "Waiting for driver response...", Toast.LENGTH_SHORT).show();
+
+                            // Start listening for response
+                            db.collection("ride_requests").document(docRef.getId())
+                                    .addSnapshotListener((snapshot, error) -> {
+                                        if (error != null || snapshot == null || !snapshot.exists()) return;
+                                        String status = snapshot.getString("status");
+                                        if ("accepted".equals(status)) {
+                                            Intent intent = new Intent(this, PassengerRouteActivity.class);
+                                            intent.putExtras(args);
+                                            intent.putExtra("rideId", rideItem.rideId);
+                                            startActivity(intent);
+                                        } else if ("rejected".equals(status)) {
+                                            Toast.makeText(this, "Request rejected. Please try another ride.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        });
+            }
+        });
+
+        recyclerView.setAdapter(adapter); // Set adapter only ONCE
+
+        for (RideItem ride : rides) {
+            db.collection("users")
+                    .whereEqualTo("username", ride.driverName)
+                    .get()
+                    .addOnSuccessListener(snap -> {
+                        if (!snap.isEmpty()) {
+                            DocumentSnapshot doc = snap.getDocuments().get(0);
+                            ride.profileImageUrl = doc.getString("profileImageUrl");
+                            adapter.notifyDataSetChanged(); // Update when image is fetched
+                        }
+
+                        try {
+                            // Get departure name
+                            List<Address> originAddresses = geocoder.getFromLocation(
+                                    ride.origin.getLatitude(),
+                                    ride.origin.getLongitude(),
+                                    1
+                            );
+                            if (!originAddresses.isEmpty()) {
+                                Address originAddress = originAddresses.get(0);
+                                ride.departureName = originAddress.getAddressLine(0);
+                                adapter.notifyDataSetChanged(); // Update after address fetch
+                            }
+
+                            // Get destination name
+                            List<Address> destAddresses = geocoder.getFromLocation(
+                                    ride.destination.getLatitude(),
+                                    ride.destination.getLongitude(),
+                                    1
+                            );
+                            if (!destAddresses.isEmpty()) {
+                                Address destAddress = destAddresses.get(0);
+                                ride.destinationName = destAddress.getAddressLine(0);
+                                adapter.notifyDataSetChanged(); // Update after address fetch
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            ride.departureName = ride.origin.getLatitude() + ", " + ride.origin.getLongitude();
+                            ride.destinationName = ride.destination.getLatitude() + ", " + ride.destination.getLongitude();
+                            adapter.notifyDataSetChanged(); // Update fallback
+                        }
                     });
         }
     }

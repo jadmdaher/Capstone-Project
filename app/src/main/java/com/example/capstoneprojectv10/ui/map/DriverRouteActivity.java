@@ -1,15 +1,21 @@
 package com.example.capstoneprojectv10.ui.map;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
+import com.example.capstoneprojectv10.MainActivity;
 import com.example.capstoneprojectv10.R;
 import com.example.capstoneprojectv10.databinding.ActivityDriverRouteBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,6 +26,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
@@ -41,6 +50,7 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
     private TextView tvDeparture;
     private TextView tvDestination;
     private TextView tvTime;
+    private Button btnCompleteRide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,7 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
         tvDeparture = binding.tvDeparture;
         tvDestination = binding.tvDestination;
         tvTime = binding.tvTime;
+        btnCompleteRide = binding.btnCompleteRide;
 
         tvDeparture.setText(" " + departureName);
         tvDestination.setText(" " + destinationName);
@@ -85,6 +96,80 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
                 .findFragmentById(R.id.map);
         if (mapFragment != null)
             mapFragment.getMapAsync(this);
+
+        String driverUsername = getSharedPreferences("UserPrefs", MODE_PRIVATE).getString("username", null);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("ride_requests")
+                .whereEqualTo("driverUsername", driverUsername)
+                .whereEqualTo("status", "pending")
+                .addSnapshotListener((snapshots, error) -> {
+                    if (error != null || snapshots == null || snapshots.isEmpty()) return;
+
+                    for (DocumentSnapshot snapshot : snapshots.getDocuments()) {
+                        String passenger = snapshot.getString("passengerUsername");
+
+                        new AlertDialog.Builder(this)
+                                .setTitle("Ride Request")
+                                .setMessage("Passenger " + passenger + " wants to join your ride.")
+                                .setPositiveButton("Accept", (dialog, which) -> {
+                                    db.collection("ride_requests").document(snapshot.getId())
+                                            .update("status", "accepted")
+                                            .addOnSuccessListener(unused -> {
+                                                String rideId = snapshot.getString("rideId");
+                                                String passengerUsername = snapshot.getString("passengerUsername");
+
+                                                if (rideId != null && passengerUsername != null) {
+                                                    db.collection("rides").document(rideId)
+                                                            .get()
+                                                            .addOnSuccessListener(rideDoc -> {
+                                                                List<String> currentPassengers = (List<String>) rideDoc.get("passengers");
+
+                                                                if (currentPassengers == null || !currentPassengers.contains(passengerUsername)) {
+                                                                    db.collection("rides").document(rideId)
+                                                                            .update("passengers", FieldValue.arrayUnion(passengerUsername))
+                                                                            .addOnSuccessListener(v -> {
+                                                                                Log.d("RideUpdate", "Passenger added to ride.");
+                                                                            });
+                                                                } else {
+                                                                    Log.d("RideUpdate", "Passenger already in ride, skipping.");
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                })
+
+                                .setNegativeButton("Reject", (dialog, which) -> {
+                                    db.collection("ride_requests").document(snapshot.getId())
+                                            .update("status", "rejected");
+                                })
+                                .setCancelable(false)
+                                .show();
+                    }
+                });
+
+        // Retrieve rideId from intent
+        String rideId = getIntent().getStringExtra("rideId");
+
+        btnCompleteRide.setOnClickListener(v -> {
+            if (rideId != null) {
+                db.collection("rides").document(rideId)
+                        .update("status", "complete")
+                        .addOnSuccessListener(unused -> {
+                            Toast.makeText(this, "Ride complete!", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(this, MainActivity.class); // or HomeActivity if you have one
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish(); // Optional redundancy for extra safety
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Failed to complete ride.", Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                Toast.makeText(this, "Ride ID not found.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.capstoneprojectv10.data.model;
 import com.google.firebase.firestore.GeoPoint;
 
 public class RideItem {
+    public String rideId;
     public String driverName;
     public String departureName;
     public String destinationName;
@@ -10,8 +11,10 @@ public class RideItem {
     public GeoPoint destination;
     public String profileImageUrl;
     public String rideDate;
+    public double score;
 
-    public RideItem(String driverName, String departureName, String destinationName, GeoPoint origin, GeoPoint destination, String profileImageUrl, String rideDate) {
+    public RideItem(String rideId, String driverName, String departureName, String destinationName, GeoPoint origin, GeoPoint destination, String profileImageUrl, String rideDate, double score) {
+        this.rideId = rideId;
         this.driverName = driverName;
         this.departureName = departureName;
         this.destinationName = destinationName;
@@ -19,5 +22,6 @@ public class RideItem {
         this.destination = destination;
         this.profileImageUrl = profileImageUrl;
         this.rideDate = rideDate;
+        this.score = score;
     }
 }

@@ -13,7 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.capstoneprojectv10.R;
+import com.example.capstoneprojectv10.data.model.RideItem;
 import com.example.capstoneprojectv10.ui.ridehistory.placeholder.PlaceholderContent;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -65,7 +73,57 @@ public class RideHistoryFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new RideHistoryRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            //recyclerView.setAdapter(new RideHistoryRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String username = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                    .getString("username", null);
+
+            List<RideItem> completedRides = new ArrayList<>();
+            RideHistoryRecyclerViewAdapter adapter = new RideHistoryRecyclerViewAdapter(completedRides);
+            recyclerView.setAdapter(adapter);
+
+            db.collection("rides")
+                    .whereEqualTo("status", "complete")
+                    .get()
+                    .addOnSuccessListener(snapshots -> {
+                        for (DocumentSnapshot doc : snapshots) {
+                            String driver = doc.getString("driver");
+                            List<String> passengers = (List<String>) doc.get("passengers");
+
+                            if (username != null && (username.equals(driver) || (passengers != null && passengers.contains(username)))) {
+                                GeoPoint origin = doc.getGeoPoint("origin");
+                                GeoPoint destination = doc.getGeoPoint("destination");
+                                Timestamp time = doc.getTimestamp("departureTime");
+                                String rideId = doc.getId();
+
+                                // Fetch driver's profile picture
+                                db.collection("users")
+                                        .whereEqualTo("username", driver)
+                                        .get()
+                                        .addOnSuccessListener(driverSnapshot -> {
+                                            String profileUrl = null;
+                                            if (!driverSnapshot.isEmpty()) {
+                                                profileUrl = driverSnapshot.getDocuments().get(0).getString("profileImageUrl");
+                                            }
+
+                                            RideItem rideItem = new RideItem(
+                                                    rideId,
+                                                    driver,
+                                                    null, // departureName
+                                                    null, // destinationName
+                                                    origin,
+                                                    destination,
+                                                    profileUrl,
+                                                    time != null ? time.toDate().toString() : "",
+                                                    0 // score is unused in history
+                                            );
+
+                                            completedRides.add(rideItem);
+                                            adapter.notifyDataSetChanged(); // Notify on each successful fetch
+                                        });
+                            }
+                        }
+                    });
         }
         return view;
     }

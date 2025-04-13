@@ -156,6 +156,94 @@
                     android:background="@drawable/text_input" />
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gender"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/gender_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kindly fill in your preferences below, for a more tailored experience!"
+                    android:textSize="16sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color"
+                    android:background="@drawable/profile_info_background"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🚬 Do you prefer a smoke-free ride?"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_smoking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/preference_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="⚤ Do you prefer to ride with the same gender?"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_gender_preference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/preference_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🎵 Do you enjoy listening to music on the road?"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/text_color"
+                    android:paddingBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_music"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/preference_options"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:background="@drawable/text_input" />
+
+                <TextView
                     android:id="@+id/tv_login_link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

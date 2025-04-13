@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
+import com.example.capstoneprojectv10.MainActivity;
 import com.example.capstoneprojectv10.R;
 import com.example.capstoneprojectv10.databinding.ActivityPassengerRouteBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
@@ -38,6 +42,9 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
     private LatLng origin, destination;
     private LinearLayout bottomSheet;
     private ActivityPassengerRouteBinding binding;
+    private TextView tvDeparture;
+    private TextView tvDestination;
+    private TextView tvTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,19 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
         bottomSheetBehavior.setPeekHeight(120);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
+        // Set ride details
+        String departureName = getIntent().getStringExtra("departure_name");
+        String destinationName = getIntent().getStringExtra("destination_name");
+        String departureTime = getIntent().getStringExtra("departure_time");
+
+        tvDeparture = binding.tvDeparture;
+        tvDestination = binding.tvDestination;
+        tvTime = binding.tvTime;
+
+        tvDeparture.setText(" " + departureName);
+        tvDestination.setText(" " + destinationName);
+        tvTime.setText(" " + departureTime);
+
         double originLat = getIntent().getDoubleExtra("origin_lat", 0);
         double originLng = getIntent().getDoubleExtra("origin_lng", 0);
         double destLat = getIntent().getDoubleExtra("dest_lat", 0);
@@ -69,6 +89,25 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        String rideId = getIntent().getStringExtra("rideId");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (rideId != null) {
+            db.collection("rides").document(rideId)
+                    .addSnapshotListener((snapshot, error) -> {
+                        if (error != null || snapshot == null || !snapshot.exists()) return;
+
+                        String status = snapshot.getString("status");
+                        if ("complete".equalsIgnoreCase(status)) {
+                            Toast.makeText(this, "Ride complete!", Toast.LENGTH_SHORT).show();
+
+                            Intent homeIntent = new Intent(this, MainActivity.class); // Use your actual home screen
+                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(homeIntent);
+                        }
+                    });
+        }
     }
 
     @Override
