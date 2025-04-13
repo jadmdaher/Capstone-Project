@@ -69,34 +69,6 @@
                 android:padding="8dp"
                 android:background="@drawable/text_input" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Departure Time"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:textColor="@color/text_color"
-                android:paddingBottom="8dp" />
-
-            <!--<TimePicker
-                android:id="@+id/tp_departure_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:timePickerMode="spinner"
-                android:padding="8dp"
-                android:background="@drawable/text_input"/>-->
-
-            <EditText
-                android:id="@+id/et_departure_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:inputType="time"
-                android:hint="Enter departure time"
-                android:padding="8dp"
-                android:background="@drawable/text_input" />
-
         </LinearLayout>
 
         <Button

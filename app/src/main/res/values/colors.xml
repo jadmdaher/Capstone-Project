@@ -11,4 +11,5 @@
     <color name="green">#0A927D</color>
     <color name="green_pressed">#0A927D</color>
     <color name="white">#FFFFFF</color>"
+    <color name="rating_star_yellow">#FFD700</color>
 </resources>

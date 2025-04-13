@@ -26,9 +26,11 @@ public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     //private final List<PlaceholderItem> mValues;
     private final List<RideItem> rideList;
+    private final onRideClickListener listener;
 
-    public RideHistoryRecyclerViewAdapter(List<RideItem> items) {
+    public RideHistoryRecyclerViewAdapter(List<RideItem> items, onRideClickListener listener) {
         this.rideList = items;
+        this.listener = listener;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         if (holder instanceof RideHistoryTitleViewHolder) {
             ((RideHistoryTitleViewHolder) holder).bind();
         } else if (holder instanceof RideHistoryViewHolder) {
-            ((RideHistoryViewHolder) holder).bind(rideList.get(position - 1)); // Adjust index for rides
+            ((RideHistoryViewHolder) holder).bind(rideList.get(position - 1), listener); // Adjust index for rides
         }
     }
 
@@ -86,7 +88,7 @@ public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             mContentView = binding.rideDate;
         }
 
-        public void bind(RideItem item) {
+        public void bind(RideItem item, onRideClickListener listener) {
             mIdView.setText("@" + item.driverName);
 
             try {
@@ -109,6 +111,8 @@ public class RideHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             } else {
                 binding.profileImage.setImageResource(R.drawable.ic_profile_placeholder);
             }
+
+            itemView.setOnClickListener(v -> listener.onRideClick(item));
         }
 
     }

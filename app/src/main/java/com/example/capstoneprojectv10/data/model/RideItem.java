@@ -11,9 +11,10 @@ public class RideItem {
     public GeoPoint destination;
     public String profileImageUrl;
     public String rideDate;
+    public String status;
     public double score;
 
-    public RideItem(String rideId, String driverName, String departureName, String destinationName, GeoPoint origin, GeoPoint destination, String profileImageUrl, String rideDate, double score) {
+    public RideItem(String rideId, String driverName, String departureName, String destinationName, GeoPoint origin, GeoPoint destination, String profileImageUrl, String rideDate, String status, double score) {
         this.rideId = rideId;
         this.driverName = driverName;
         this.departureName = departureName;
@@ -22,6 +23,7 @@ public class RideItem {
         this.destination = destination;
         this.profileImageUrl = profileImageUrl;
         this.rideDate = rideDate;
+        this.status = status;
         this.score = score;
     }
 }

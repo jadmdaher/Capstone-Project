@@ -1,28 +1,42 @@
 package com.example.capstoneprojectv10.ui.map;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
-import com.example.capstoneprojectv10.MainActivity;
+import com.example.capstoneprojectv10.ui.riderating.RateRideActivity;
 import com.example.capstoneprojectv10.R;
 import com.example.capstoneprojectv10.databinding.ActivityPassengerRouteBinding;
+import com.example.capstoneprojectv10.utils.LocationTracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.ButtCap;
+import com.google.android.gms.maps.model.Cap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.PolyUtil;
 
@@ -33,7 +47,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PassengerRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -44,7 +60,8 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
     private ActivityPassengerRouteBinding binding;
     private TextView tvDeparture;
     private TextView tvDestination;
-    private TextView tvTime;
+    private LocationTracker locationTracker;
+    private final Map<String, Marker> userMarkers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +80,17 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
         bottomSheet = binding.bottomSheet;
         BottomSheetBehavior<LinearLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight(120);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         // Set ride details
         String departureName = getIntent().getStringExtra("departure_name");
         String destinationName = getIntent().getStringExtra("destination_name");
-        String departureTime = getIntent().getStringExtra("departure_time");
 
         tvDeparture = binding.tvDeparture;
         tvDestination = binding.tvDestination;
-        tvTime = binding.tvTime;
 
         tvDeparture.setText(" " + departureName);
         tvDestination.setText(" " + destinationName);
-        tvTime.setText(" " + departureTime);
 
         double originLat = getIntent().getDoubleExtra("origin_lat", 0);
         double originLng = getIntent().getDoubleExtra("origin_lng", 0);
@@ -91,6 +105,10 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
 
         String rideId = getIntent().getStringExtra("rideId");
+        String username = getSharedPreferences("UserPrefs", MODE_PRIVATE).getString("username", null);
+        locationTracker = new LocationTracker(this, rideId, username);
+        locationTracker.startTracking();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         if (rideId != null) {
@@ -102,9 +120,11 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
                         if ("complete".equalsIgnoreCase(status)) {
                             Toast.makeText(this, "Ride complete!", Toast.LENGTH_SHORT).show();
 
-                            Intent homeIntent = new Intent(this, MainActivity.class); // Use your actual home screen
-                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(homeIntent);
+                            Intent rateIntent = new Intent(this, RateRideActivity.class);
+                            rateIntent.putExtra("rideId", rideId);
+                            startActivity(rateIntent);
+                            rateIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(rateIntent);
                         }
                     });
         }
@@ -112,8 +132,8 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions().position(origin).title("Origin"));
-        googleMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
+        googleMap.addMarker(new MarkerOptions().position(origin).title("Origin").icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.marker_circle_green))));
+        googleMap.addMarker(new MarkerOptions().position(destination).title("Destination").icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.marker_circle_red))));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 15f));
 
         // Fetch and draw the route
@@ -127,6 +147,45 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
 
         // Draw a polyline between the points
         googleMap.addPolyline(new PolylineOptions().add(origin, destination).width(10).color(Color.BLUE));*/
+
+        String rideId = getIntent().getStringExtra("rideId");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("rides").document(rideId)
+                .collection("locations")
+                .addSnapshotListener((snapshots, error) -> {
+                    if (error != null || snapshots == null) return;
+
+                    for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                        String user = doc.getId();
+                        Double lat = doc.getDouble("latitude");
+                        Double lng = doc.getDouble("longitude");
+                        if (lat == null || lng == null) continue;
+
+                        LatLng userLocation = new LatLng(lat, lng);
+
+                        db.collection("users")
+                                .whereEqualTo("username", user)
+                                .get()
+                                .addOnSuccessListener(querySnapshot  -> {
+                                    String role = querySnapshot.getDocuments().get(0).getString("role");
+                                    int iconRes = "driver".equalsIgnoreCase(role) ? R.drawable.marker_car : R.drawable.marker_circle_purple;
+                                    BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(iconRes));
+
+                                    if (userMarkers.containsKey(user)) {
+                                        userMarkers.get(user).setPosition(userLocation);
+                                    } else {
+                                        Marker marker = googleMap.addMarker(
+                                                new MarkerOptions()
+                                                        .position(userLocation)
+                                                        .title("@" + user)
+                                                        .icon(icon)
+                                        );
+                                        userMarkers.put(user, marker);
+                                    }
+                                });
+                    }
+                });
     }
 
     private void fetchRoute(GoogleMap map) {
@@ -157,8 +216,19 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
 
                     runOnUiThread(() -> map.addPolyline(new PolylineOptions()
                             .addAll(decodedPath)
+                            .color(Color.LTGRAY)
+                            .width(30f)
+                            .startCap(new RoundCap())
+                            .endCap(new RoundCap())
+                            .jointType(JointType.ROUND)));
+
+                    runOnUiThread(() -> map.addPolyline(new PolylineOptions()
+                            .addAll(decodedPath)
                             .color(getResources().getColor(R.color.blue, getTheme()))
-                            .width(20f)));
+                            .width(20f)
+                            .startCap(new RoundCap())
+                            .endCap(new RoundCap())
+                            .jointType(JointType.ROUND)));
                 }
 
             } catch (Exception e) {
@@ -195,11 +265,25 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    private Bitmap getBitmapFromVectorDrawable(@DrawableRes int drawableId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(this, drawableId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(
+                vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+
     //Specify what happens onDestroy
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mMap.clear();
+        if (locationTracker != null) {
+            locationTracker.stopTracking();
+        }
         finish();
     }
 

@@ -110,7 +110,6 @@ public class NewRideFragment extends Fragment {
 
         etDepartureLocation = view.findViewById(R.id.et_departure_location);
         etDestinationLocation = view.findViewById(R.id.et_destination_location);
-        etDepartureTime = view.findViewById(R.id.et_departure_time);
         btnNewRide = view.findViewById(R.id.btn_new_ride);
         placesClient = Places.createClient(requireContext());
 
@@ -136,9 +135,8 @@ public class NewRideFragment extends Fragment {
         btnNewRide.setOnClickListener(v -> {
             String departure = etDepartureLocation.getText().toString().trim();
             String arrival = etDestinationLocation.getText().toString().trim();
-            String stringDepartureTime = etDepartureTime.getText().toString().trim();
 
-            if (departure.isEmpty() || arrival.isEmpty() || stringDepartureTime.isEmpty()) {
+            if (departure.isEmpty() || arrival.isEmpty()) {
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -210,7 +208,6 @@ public class NewRideFragment extends Fragment {
                                                                                             intent.putExtras(args);
                                                                                             intent.putExtra("departure_name", departure);
                                                                                             intent.putExtra("destination_name", arrival);
-                                                                                            intent.putExtra("departure_time", stringDepartureTime);
                                                                                             intent.putExtra("rideId", docRef.getId());
                                                                                             startActivity(intent);
                                                                                         })
@@ -322,9 +319,10 @@ public class NewRideFragment extends Fragment {
 
                                                                                                                                     if (matchScore >= 60.0) {
                                                                                                                                         String rideId = doc.getId();
+                                                                                                                                        String status = doc.getString("status");
                                                                                                                                         Timestamp time = doc.getTimestamp("departureTime");
                                                                                                                                         //RideItem rideItem = new RideItem(driverUsername, null, null, doc.getGeoPoint("origin"), doc.getGeoPoint("destination"), null, time.toDate().toString());
-                                                                                                                                        RideItem rideItem = new RideItem(rideId, driverUsername, null, null, originGeo, destinationGeo, null, time.toDate().toString(), matchScore);
+                                                                                                                                        RideItem rideItem = new RideItem(rideId, driverUsername, null, null, originGeo, destinationGeo, null, time.toDate().toString(), status, matchScore);
                                                                                                                                         matchedRides.add(rideItem);
                                                                                                                                         //matchedRidesWithScores.add(new Pair<>(rideItem, matchScore));
                                                                                                                                     }

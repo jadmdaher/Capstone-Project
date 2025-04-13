@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Circle background -->
+    <path
+        android:pathData="M12,1A11,11 0 1,1 11.999,1Z"
+        android:fillColor="#2196F3"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5" />
+
+    <!-- Scaled and centered car icon inside 24x24 viewport -->
+    <group
+        android:scaleX="0.75"
+        android:scaleY="0.75"
+        android:translateX="3"
+        android:translateY="2">
+
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M18.92,6.01C18.72,5.42 18.15,5 17.5,5h-11c-0.65,0 -1.22,0.42 -1.42,1.01L3,12v8c0,0.55 0.45,1 1,1h1c0.55,0 1,-0.45 1,-1v-1h12v1c0,0.55 0.45,1 1,1h1c0.55,0 1,-0.45 1,-1v-8l-2.08,-5.99zM6.5,16c-0.83,0 -1.5,-0.67 -1.5,-1.5S5.67,13 6.5,13 8,13.67 8,14.5 7.33,16 6.5,16zM17.5,16c-0.83,0 -1.5,-0.67 -1.5,-1.5S16.67,13 17.5,13 19,13.67 19,14.5 18.33,16 17.5,16zM5,11l1.5,-4.5h11L19,11H5z" />
+    </group>
+</vector>
