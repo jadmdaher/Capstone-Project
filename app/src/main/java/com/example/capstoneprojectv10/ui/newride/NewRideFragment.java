@@ -490,7 +490,7 @@ public class NewRideFragment extends Fragment {
     }
 
     private void fetchDirectionsPoints(LatLng origin, LatLng destination, Consumer<List<LatLng>> callback) {
-        String apiKey = "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU";
+        String apiKey = "MAPS_API_KEY";
         String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
                 origin.latitude + "," + origin.longitude +
                 "&destination=" + destination.latitude + "," + destination.longitude +

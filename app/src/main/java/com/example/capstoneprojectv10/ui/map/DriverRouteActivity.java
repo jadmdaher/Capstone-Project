@@ -238,7 +238,7 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
     private void fetchRoute(GoogleMap map) {
         new Thread(() -> {
             try {
-                String apiKey = "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU";
+                String apiKey = "MAPS_API_KEY";
                 String urlStr = "https://maps.googleapis.com/maps/api/directions/json?origin="
                         + originLatLng.latitude + "," + originLatLng.longitude
                         + "&destination=" + destLatLng.latitude + "," + destLatLng.longitude

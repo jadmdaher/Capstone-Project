@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         // Initializing Places SDK
-        Places.initialize(getApplicationContext(), "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU");
+        Places.initialize(getApplicationContext(), "MAPS_API_KEY");
     }
 
 }

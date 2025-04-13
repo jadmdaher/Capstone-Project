@@ -191,7 +191,7 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
     private void fetchRoute(GoogleMap map) {
         new Thread(() -> {
             try {
-                String apiKey = "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU";
+                String apiKey = "MAPS_API_KEY";
                 String urlStr = "https://maps.googleapis.com/maps/api/directions/json?origin="
                         + origin.latitude + "," + origin.longitude
                         + "&destination=" + destination.latitude + "," + destination.longitude
