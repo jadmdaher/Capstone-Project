@@ -188,6 +188,10 @@ public class AvailableRideActivity extends AppCompatActivity {
                                         if ("accepted".equals(status)) {
                                             Intent intent = new Intent(this, PassengerRouteActivity.class);
                                             intent.putExtras(args);
+                                            intent.putExtra("departure_name", rideItem.departureName);
+                                            intent.putExtra("destination_name", rideItem.destinationName);
+                                            intent.putExtra("departure_date", rideItem.rideDate);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             intent.putExtra("rideId", rideItem.rideId);
                                             startActivity(intent);
                                         } else if ("rejected".equals(status)) {

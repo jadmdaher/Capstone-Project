@@ -17,6 +17,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.capstoneprojectv10.databinding.ActivityMainBinding;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         // Initializing Places SDK
-        Places.initialize(getApplicationContext(), "MAPS_API_KEY");
+        Places.initialize(getApplicationContext(), "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU");
     }
 
 }

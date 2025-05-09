@@ -317,14 +317,13 @@ public class NewRideFragment extends Fragment {
                                                                                                                                     boolean test = matchScore >= 60.0;
                                                                                                                                     Log.d("MatchScore", "Overlap Percent = " + matchPercent + ", Preference Score = " + preferenceScore + ", Match Score = " + matchScore + ", Boolean = " + test + ", Driver = " + driverUsername);
 
-                                                                                                                                    if (matchScore >= 60.0) {
-                                                                                                                                        String rideId = doc.getId();
-                                                                                                                                        String status = doc.getString("status");
-                                                                                                                                        Timestamp time = doc.getTimestamp("departureTime");
-                                                                                                                                        //RideItem rideItem = new RideItem(driverUsername, null, null, doc.getGeoPoint("origin"), doc.getGeoPoint("destination"), null, time.toDate().toString());
+                                                                                                                                    String rideId = doc.getId();
+                                                                                                                                    String status = doc.getString("status");
+                                                                                                                                    Timestamp time = doc.getTimestamp("departureTime");
+                                                                                                                                    //RideItem rideItem = new RideItem(driverUsername, null, null, doc.getGeoPoint("origin"), doc.getGeoPoint("destination"), null, time.toDate().toString());
+                                                                                                                                    if(matchPercent >= 10.0 && preferenceScore >= (2.0/3.0) * 100){
                                                                                                                                         RideItem rideItem = new RideItem(rideId, driverUsername, null, null, originGeo, destinationGeo, null, time.toDate().toString(), status, matchScore);
                                                                                                                                         matchedRides.add(rideItem);
-                                                                                                                                        //matchedRidesWithScores.add(new Pair<>(rideItem, matchScore));
                                                                                                                                     }
                                                                                                                                 }
                                                                                                                             });
@@ -385,7 +384,7 @@ public class NewRideFragment extends Fragment {
                                                                                                         } else {
                                                                                                             Toast.makeText(getContext(), "No rides available", Toast.LENGTH_SHORT).show();
                                                                                                         }
-                                                                                                    }, 15000); // 15-second delay — enough for inner async stuff to (likely) finish
+                                                                                                    }, 2500); // 2.5-second delay — enough for inner async to finish
                                                                                                 });
                                                                                             }
                                                                                         }
@@ -490,7 +489,7 @@ public class NewRideFragment extends Fragment {
     }
 
     private void fetchDirectionsPoints(LatLng origin, LatLng destination, Consumer<List<LatLng>> callback) {
-        String apiKey = "MAPS_API_KEY";
+        String apiKey = "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU";
         String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
                 origin.latitude + "," + origin.longitude +
                 "&destination=" + destination.latitude + "," + destination.longitude +

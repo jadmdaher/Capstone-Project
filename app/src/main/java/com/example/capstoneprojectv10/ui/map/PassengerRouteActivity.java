@@ -1,6 +1,8 @@
 package com.example.capstoneprojectv10.ui.map;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
@@ -66,6 +69,9 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkLocationPermission();
+
         getSupportActionBar().hide();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -191,7 +197,7 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
     private void fetchRoute(GoogleMap map) {
         new Thread(() -> {
             try {
-                String apiKey = "MAPS_API_KEY";
+                String apiKey = "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU";
                 String urlStr = "https://maps.googleapis.com/maps/api/directions/json?origin="
                         + origin.latitude + "," + origin.longitude
                         + "&destination=" + destination.latitude + "," + destination.longitude
@@ -275,6 +281,27 @@ public class PassengerRouteActivity extends AppCompatActivity implements OnMapRe
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return bitmap;
+    }
+
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Location permission granted.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Location permission denied. Location features may not work properly.", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     //Specify what happens onDestroy

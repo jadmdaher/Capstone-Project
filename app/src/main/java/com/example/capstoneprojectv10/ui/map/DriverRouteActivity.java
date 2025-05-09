@@ -1,6 +1,7 @@
 package com.example.capstoneprojectv10.ui.map;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,10 +18,12 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
 import com.example.capstoneprojectv10.MainActivity;
+import android.Manifest;
 import com.example.capstoneprojectv10.R;
 import com.example.capstoneprojectv10.databinding.ActivityDriverRouteBinding;
 import com.example.capstoneprojectv10.utils.LocationTracker;
@@ -69,6 +72,9 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkLocationPermission();
+
         getSupportActionBar().hide();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
@@ -119,43 +125,44 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
 
                     for (DocumentSnapshot snapshot : snapshots.getDocuments()) {
                         String passenger = snapshot.getString("passengerUsername");
+                        if (!DriverRouteActivity.this.isFinishing()) {
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Ride Request")
+                                    .setMessage("Passenger " + passenger + " wants to join your ride.")
+                                    .setPositiveButton("Accept", (dialog, which) -> {
+                                        db.collection("ride_requests").document(snapshot.getId())
+                                                .update("status", "accepted")
+                                                .addOnSuccessListener(unused -> {
+                                                    String rideId = snapshot.getString("rideId");
+                                                    String passengerUsername = snapshot.getString("passengerUsername");
 
-                        new AlertDialog.Builder(this)
-                                .setTitle("Ride Request")
-                                .setMessage("Passenger " + passenger + " wants to join your ride.")
-                                .setPositiveButton("Accept", (dialog, which) -> {
-                                    db.collection("ride_requests").document(snapshot.getId())
-                                            .update("status", "accepted")
-                                            .addOnSuccessListener(unused -> {
-                                                String rideId = snapshot.getString("rideId");
-                                                String passengerUsername = snapshot.getString("passengerUsername");
+                                                    if (rideId != null && passengerUsername != null) {
+                                                        db.collection("rides").document(rideId)
+                                                                .get()
+                                                                .addOnSuccessListener(rideDoc -> {
+                                                                    List<String> currentPassengers = (List<String>) rideDoc.get("passengers");
 
-                                                if (rideId != null && passengerUsername != null) {
-                                                    db.collection("rides").document(rideId)
-                                                            .get()
-                                                            .addOnSuccessListener(rideDoc -> {
-                                                                List<String> currentPassengers = (List<String>) rideDoc.get("passengers");
+                                                                    if (currentPassengers == null || !currentPassengers.contains(passengerUsername)) {
+                                                                        db.collection("rides").document(rideId)
+                                                                                .update("passengers", FieldValue.arrayUnion(passengerUsername))
+                                                                                .addOnSuccessListener(v -> {
+                                                                                    Log.d("RideUpdate", "Passenger added to ride.");
+                                                                                });
+                                                                    } else {
+                                                                        Log.d("RideUpdate", "Passenger already in ride, skipping.");
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+                                    })
 
-                                                                if (currentPassengers == null || !currentPassengers.contains(passengerUsername)) {
-                                                                    db.collection("rides").document(rideId)
-                                                                            .update("passengers", FieldValue.arrayUnion(passengerUsername))
-                                                                            .addOnSuccessListener(v -> {
-                                                                                Log.d("RideUpdate", "Passenger added to ride.");
-                                                                            });
-                                                                } else {
-                                                                    Log.d("RideUpdate", "Passenger already in ride, skipping.");
-                                                                }
-                                                            });
-                                                }
-                                            });
-                                })
-
-                                .setNegativeButton("Reject", (dialog, which) -> {
-                                    db.collection("ride_requests").document(snapshot.getId())
-                                            .update("status", "rejected");
-                                })
-                                .setCancelable(false)
-                                .show();
+                                    .setNegativeButton("Reject", (dialog, which) -> {
+                                        db.collection("ride_requests").document(snapshot.getId())
+                                                .update("status", "rejected");
+                                    })
+                                    .setCancelable(false)
+                                    .show();
+                        }
                     }
                 });
 
@@ -238,7 +245,7 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
     private void fetchRoute(GoogleMap map) {
         new Thread(() -> {
             try {
-                String apiKey = "MAPS_API_KEY";
+                String apiKey = "AIzaSyASboo4rxLoC4QkA9ZeH5yWI4flQi_hXxU";
                 String urlStr = "https://maps.googleapis.com/maps/api/directions/json?origin="
                         + originLatLng.latitude + "," + originLatLng.longitude
                         + "&destination=" + destLatLng.latitude + "," + destLatLng.longitude
@@ -294,6 +301,27 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return bitmap;
+    }
+
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Location permission granted.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Location permission denied. Location features may not work properly.", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     // Finish the activity on goBack
