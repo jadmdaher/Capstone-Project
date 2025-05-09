@@ -1,8 +1,8 @@
 Requirements:
 1. Android Studio Ladybug version 2024.2.2 or later.
-2.1. Android device emulator with minimum Android SDK version = 28. The target SDK version is 35.
-2.2. If you do not have or cannot download/run an Android emulator on your computer, you can use a physical Android device (not Huawei) and connect it by cable.
-2.3. If you choose to use a physical Android device you need to enable developer options and enable USB debugging (enabling developer options may differ on each device so please check how to do so on the device you choose to use).
+2. Android device emulator with minimum Android SDK version = 28. The target SDK version is 35.
+3. If you do not have or cannot download/run an Android emulator on your computer, you can use a physical Android device (not Huawei) and connect it by cable.
+4. If you choose to use a physical Android device you need to enable developer options and enable USB debugging (enabling developer options may differ on each device so please check how to do so on the device you choose to use).
 
 To run this project, follow these steps:
 1. Extract the project files from the downloaded ZIP folder.
